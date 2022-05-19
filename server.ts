@@ -8,6 +8,7 @@ import * as MaestrosRutas from './routes/maestros.routes';
 
 const server = express();
 
+server.use(express.json());
 server.get('/', (req:Request, res:Response) => {
 res.send('BackEnd de Prueba');
 });

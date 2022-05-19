@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,33 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Alumnos {
+  idAlumno        Int          @id @default(autoincrement())
+  numControl      String       @db.VarChar(8)
+  nombre          String       @db.VarChar(30)
+  apellidos       String       @db.VarChar(30)
+  sexo            Alumnos_sexo
+  semestre        Int          @db.TinyInt
+  carrera         String       @db.VarChar(50)
+  especialidad    String?      @db.VarChar(50) 
+  fechaNacimiento DateTime     @db.Date
+  createdAt       DateTime?    @default(now()) @db.DateTime(0)
+  updatedAt       DateTime?    @default(now()) @db.DateTime(0)
+  status          Boolean?     @default(true)
+}
+
+model Materias {
+  idMateria Int       @id @default(autoincrement())
+  nombre    String?   @db.VarChar(30)
+  carrera   String?   @db.VarChar(30)
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @default(now()) @db.DateTime(0)
+  status    Boolean?  @default(true)
+}
+
+enum Alumnos_sexo {
+  F
+  M
 }
