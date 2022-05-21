@@ -15,7 +15,7 @@ model Alumnos {
   sexo            Alumnos_sexo
   semestre        Int          @db.TinyInt
   carrera         String       @db.VarChar(50)
-  especialidad    String?      @db.VarChar(50) 
+  especialidad    String?      @db.VarChar(50)
   fechaNacimiento DateTime     @db.Date
   createdAt       DateTime?    @default(now()) @db.DateTime(0)
   updatedAt       DateTime?    @default(now()) @db.DateTime(0)
@@ -29,6 +29,15 @@ model Materias {
   createdAt DateTime? @default(now()) @db.DateTime(0)
   updatedAt DateTime? @default(now()) @db.DateTime(0)
   status    Boolean?  @default(true)
+}
+
+model Usuarios {
+  idUsuario  Int     @id @default(autoincrement())
+  usuario    String  @db.VarChar(30)
+  nombre     String  @db.VarChar(30)
+  apellido   String  @db.VarChar(30)
+  status     Boolean @default(true)
+  contrasena String  @db.VarChar(80)
 }
 
 enum Alumnos_sexo {
