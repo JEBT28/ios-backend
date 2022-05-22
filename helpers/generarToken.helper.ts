@@ -1,5 +1,11 @@
-export const generarToken = (usuario:any) => {
+import jwt from 'jsonwebtoken';
+
+const secretkey = process.env.SECRETKEY || "";
+
+export const generarToken = (usuario: any) => {
     let token;
+
+    token = jwt.sign({ usuario }, secretkey, { expiresIn: '24h' });
 
     return token;
 }
