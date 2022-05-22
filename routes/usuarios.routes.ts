@@ -13,7 +13,7 @@ router.get("/",validarJWT, getUsuarios);
 router.post("/",validarJWT, postNuevoUsuario);
 router.put("/:id",validarJWT, putEditarUsuario);
 router.delete("/:id",validarJWT ,deleteEliminarUsuario);
-router.put("/contraseña/:id",validarJWT, putEditarContraseña);
+router.put("/contrasena/:id",validarJWT, putEditarContraseña);
 router.post("/auth/" ,postIniciarSesion)
 router.get("/auth/renew", renovarToken);
 
