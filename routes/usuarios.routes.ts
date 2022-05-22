@@ -14,8 +14,8 @@ router.post("/",validarJWT, postNuevoUsuario);
 router.put("/:id",validarJWT, putEditarUsuario);
 router.delete("/:id",validarJWT ,deleteEliminarUsuario);
 router.put("/contraseña/:id",validarJWT, putEditarContraseña);
-router.post("/auth/",validarJWT ,postIniciarSesion)
-router.get("/auth/renew",validarJWT, renovarToken);
+router.post("/auth/" ,postIniciarSesion)
+router.get("/auth/renew", renovarToken);
 
 
 export default router;
