@@ -9,7 +9,7 @@ const { usuarios: Usuarios } = new PrismaClient();
 
 export const getUsuarios = async (req: Request, res: Response) => {
     try {
-        const usuarios = await Usuarios.findMany();
+        const usuarios = await Usuarios.findMany({select:{idUsuario:true, nombre:true, apellido:true, usuario:true, status:true}});
         return res.json({ ok: true, msg: "Listado de usuarios", results: usuarios });
     }
     catch (error: any) {
@@ -47,7 +47,8 @@ export const putEditarUsuario = async (req: Request, res: Response) => {
 
         const editarUsuario = await Usuarios.update({
             where: { idUsuario: +id },
-            data: data
+            data: data,
+            select:{idUsuario:true, nombre:true, apellido:true, usuario:true, status:true}
         });
 
         return res.json({ ok: true, msg: "Usuario editado correctamente", results: editarUsuario });
@@ -70,7 +71,8 @@ export const deleteEliminarUsuario = async (req: Request, res: Response) => {
 
         const eliminarUsuario = await Usuarios.update({
             where: { idUsuario: +id },
-            data: { status: false }
+            data: { status: false },
+            select:{idUsuario:true}
         });
 
         return res.json({ ok: true, msg: "Usuario eliminado correctamente", results: eliminarUsuario });
@@ -104,7 +106,7 @@ export const putEditarContraseña = async (req: Request, res: Response) => {
             data: { contrasena: nueva }
         });
 
-        return res.json({ ok: true, msg: "Contraseña editada correctamente", results: editarContrasena });
+        return res.json({ ok: true, msg: "Contraseña editada correctamente" });
 
     } catch (error) {
         console.log("🚀 ~ file: usuario.controller.ts ~ line 110 ~ constputEditarContraseña= ~ error", error)
@@ -130,7 +132,7 @@ export const postIniciarSesion = async (req: Request, res: Response) => {
 
         const token = generarToken(usuarioDB);
 
-        return res.json({ ok: true, msg: "Inicio de sesion exitoso", results: { usuario: usuarioDB, token } });
+        return res.json({ ok: true, msg: "Inicio de sesion exitoso", results: { token } });
 
     } catch (error) {
         console.log("🚀 ~ file: usuario.controller.ts ~ line 136 ~ postIniciarSesion ~ error", error)
