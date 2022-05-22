@@ -102,9 +102,11 @@ export const putEditarContraseña = async (req: Request, res: Response) => {
             return res.status(400).json({ ok: false, msg: "La contraseña actual no es correcta" })
         }
 
+        const hash = await brcypt.hash(nueva, 10);
+
         const editarContrasena = await Usuarios.update({
             where: { idUsuario: +id },
-            data: { contrasena: nueva }
+            data: { contrasena: hash }
         });
 
         return res.json({ ok: true, msg: "Contraseña editada correctamente" });
