@@ -97,6 +97,7 @@ export const putEditarContraseña = async (req: Request, res: Response) => {
 
         const contrasena = await brcypt.compare(actual, usuario.contrasena);
 
+
         if (!contrasena) {
             return res.status(400).json({ ok: false, msg: "La contraseña actual no es correcta" })
         }

@@ -10,7 +10,7 @@ import { validarJWT } from "../middlewares/validarJWT.middleware";
 const router = Router()
 
 router.get("/",validarJWT, getUsuarios);
-router.post("/",validarJWT, postNuevoUsuario);
+router.post("/", postNuevoUsuario);
 router.put("/:id",validarJWT, putEditarUsuario);
 router.delete("/:id",validarJWT ,deleteEliminarUsuario);
 router.put("/contrasena/:id",validarJWT, putEditarContraseña);
