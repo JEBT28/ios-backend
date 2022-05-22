@@ -9,7 +9,7 @@ const { usuarios: Usuarios } = new PrismaClient();
 
 export const getUsuarios = async (req: Request, res: Response) => {
     try {
-        const usuarios = await Usuarios.findMany({select:{idUsuario:true, nombre:true, apellido:true, usuario:true, status:true}});
+        const usuarios = await Usuarios.findMany({ select: { idUsuario: true, nombre: true, apellido: true, usuario: true, status: true } });
         return res.json({ ok: true, msg: "Listado de usuarios", results: usuarios });
     }
     catch (error: any) {
@@ -24,13 +24,24 @@ export const postNuevoUsuario = async (req: Request, res: Response) => {
     try {
         const encrypted = await brcypt.hash(contrasena, 10);
         data.contrasena = encrypted;
-        const nuevoUsuario = await Usuarios.create({ data: data });
+
+        const existe = await Usuarios.findFirst({
+            where: {
+                usuario: data.usuario,
+                status: true
+            }
+        });
+
+        if (existe) {
+            return res.status(400).json({ ok: false, msg: "Ya existe otra cuenta con el usuario especificado" });
+        }
+
+        await Usuarios.create({ data: data });
         return res.json({ ok: true, msg: "Usuario creado correctamente" });
     }
     catch (error: any) {
         console.log("🚀 ~ file: usuario.controller.ts ~ line 29 ~ postNuevoUsuario ~ error", error)
         return res.status(400).json({ ok: false, msg: "Ocurrio un problema al crear un nuevo usuario", value: error });
-        console.log("🚀 ~ file: usuario.controller.ts ~ line 33 ~ postNuevoUsuario ~ error", error)
     }
 }
 
@@ -48,7 +59,7 @@ export const putEditarUsuario = async (req: Request, res: Response) => {
         const editarUsuario = await Usuarios.update({
             where: { idUsuario: +id },
             data: data,
-            select:{idUsuario:true, nombre:true, apellido:true, usuario:true, status:true}
+            select: { idUsuario: true, nombre: true, apellido: true, usuario: true, status: true }
         });
 
         return res.json({ ok: true, msg: "Usuario editado correctamente", results: editarUsuario });
@@ -72,7 +83,7 @@ export const deleteEliminarUsuario = async (req: Request, res: Response) => {
         const eliminarUsuario = await Usuarios.update({
             where: { idUsuario: +id },
             data: { status: false },
-            select:{idUsuario:true}
+            select: { idUsuario: true }
         });
 
         return res.json({ ok: true, msg: "Usuario eliminado correctamente", results: eliminarUsuario });
@@ -146,17 +157,17 @@ export const postIniciarSesion = async (req: Request, res: Response) => {
 
 export const renovarToken = async (req: Request, res: Response) => {
     //Renew token from token
-    const token  = req.header("x-token")!
+    const token = req.header("x-token")!
 
     try {
-        const {usuario} = await verificarToken(token);
+        const { usuario } = await verificarToken(token);
         console.log("🚀 ~ file: usuario.controller.ts ~ line 136 ~ renovarToken ~ usuario", usuario)
         const tokenRenew = generarToken(usuario);
         console.log("🚀 ~ file: usuario.controller.ts ~ line 138 ~ renovarToken ~ tokenRenew", tokenRenew)
         return res.json({ ok: true, msg: "Token renovado", results: { token: tokenRenew } });
-    } catch(error:any){
-            console.log("🚀 ~ file: usuario.controller.ts ~ line 153 ~ renovarToken ~ error", error)
-            return res.status(401).json({ ok: false, msg: "Ocurrio un problema al renovar el token", value: error });
-            console.log("🚀 ~ file: usuario.controller.ts ~ line 155 ~ renovarToken ~ error", error)
+    } catch (error: any) {
+        console.log("🚀 ~ file: usuario.controller.ts ~ line 153 ~ renovarToken ~ error", error)
+        return res.status(401).json({ ok: false, msg: "Ocurrio un problema al renovar el token", value: error });
+        console.log("🚀 ~ file: usuario.controller.ts ~ line 155 ~ renovarToken ~ error", error)
     }
 }
