@@ -7,30 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Alumnos {
-  idAlumno        Int          @id @default(autoincrement())
-  numControl      String       @db.VarChar(8)
-  nombre          String       @db.VarChar(30)
-  apellidos       String       @db.VarChar(30)
-  sexo            Alumnos_sexo
-  semestre        Int          @db.TinyInt
-  carrera         String       @db.VarChar(50)
-  especialidad    String?      @db.VarChar(50)
-  fechaNacimiento DateTime     @db.Date
-  createdAt       DateTime?    @default(now()) @db.DateTime(0)
-  updatedAt       DateTime?    @default(now()) @db.DateTime(0)
-  status          Boolean?     @default(true)
-}
-
-model Materias {
-  idMateria Int       @id @default(autoincrement())
-  nombre    String?   @db.VarChar(30)
-  carrera   String?   @db.VarChar(30)
-  createdAt DateTime? @default(now()) @db.DateTime(0)
-  updatedAt DateTime? @default(now()) @db.DateTime(0)
-  status    Boolean?  @default(true)
-}
-
 model Usuarios {
   idUsuario  Int     @id @default(autoincrement())
   usuario    String  @db.VarChar(30)
@@ -38,9 +14,17 @@ model Usuarios {
   apellido   String  @db.VarChar(30)
   status     Boolean @default(true)
   contrasena String  @db.VarChar(80)
+  foto       String  @default("") @db.VarChar(255)
+  Posts      Posts[]
 }
 
-enum Alumnos_sexo {
-  F
-  M
+model Posts {
+  idPost      Int      @id @default(autoincrement())
+  idUsuario   Int
+  img         String?  @default("") @db.VarChar(255)
+  publicacion DateTime @default(now()) @db.DateTime(0)
+  status      Boolean  @default(true)
+  Usuarios    Usuarios @relation(fields: [idUsuario], references: [idUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK1_usuarios")
+
+  @@index([idUsuario], map: "FK1_usuarios")
 }

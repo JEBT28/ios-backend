@@ -23,10 +23,12 @@ export const validarJWT = async (req: Request, res: Response, next: NextFunction
         if (!existe) {
             return res.status(401).json({ ok: false, msg: "El usuario no existe" })
         }
+        res.locals.idUsuario = existe.idUsuario;
 
         next();
 
     } catch (error: any) {
+        console.log("🚀 ~ file: validarJWT.middleware.ts ~ line 31 ~ validarJWT ~ error", error)
         return res.status(400).json({ ok: false, msg: "No se pudo validar el token" })
     }
 
