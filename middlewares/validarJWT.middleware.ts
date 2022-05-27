@@ -14,9 +14,10 @@ export const validarJWT = async (req: Request, res: Response, next: NextFunction
 
     try {
         const usuario: any = jwt.verify(token, process.env.SECRETKEY!);
+        console.log("🚀 ~ file: validarJWT.middleware.ts ~ line 17 ~ validarJWT ~ usuario", usuario)
         const existe = await Usuarios.findFirst({
             where: {
-                idUsuario: usuario.idUsuario,
+                idUsuario: usuario.usuario.idUsuario,
                 status: true
             }
         })
@@ -24,6 +25,7 @@ export const validarJWT = async (req: Request, res: Response, next: NextFunction
             return res.status(401).json({ ok: false, msg: "El usuario no existe" })
         }
         res.locals.idUsuario = existe.idUsuario;
+        res.locals.usuario = existe.usuario;
 
         next();
 

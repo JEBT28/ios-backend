@@ -3,6 +3,9 @@ import { PrismaClient } from '@prisma/client';
 
 //----------Rutas-----------
 import * as UsuariosRutas from './routes/usuarios.routes';
+import * as PostsRutas from "./routes/Posts.routes";
+import * as SeguidoresRutas from "./routes/Seguidores.routes";
+
 
 const server = express();
 
@@ -12,6 +15,8 @@ res.send('BackEnd de Prueba');
 });
 
 server.use("/usuarios", UsuariosRutas.default);
+server.use("/posts", PostsRutas.default);
+server.use("/seguidores", SeguidoresRutas.default);
 
 server.get("*",(res:Response)=>{
     res.status(404).send("Ruta no encontrada");
