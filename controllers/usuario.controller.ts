@@ -27,7 +27,11 @@ export const getUsuarios = async (req: Request, res: Response) => {
             where: {
                 status:true
             }
-        },
+        },Seguidores: {
+          where: {
+              status:true
+          }
+      },
       },
     });
     return res.json({

@@ -14,7 +14,7 @@ export const validarJWT = async (req: Request, res: Response, next: NextFunction
 
     try {
         const usuario: any = jwt.verify(token, process.env.SECRETKEY!);
-        console.log("🚀 ~ file: validarJWT.middleware.ts ~ line 17 ~ validarJWT ~ usuario", usuario)
+        // console.log("🚀 ~ file: validarJWT.middleware.ts ~ line 17 ~ validarJWT ~ usuario", usuario)
         const existe = await Usuarios.findFirst({
             where: {
                 idUsuario: usuario.usuario.idUsuario,
