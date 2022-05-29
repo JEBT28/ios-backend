@@ -28,13 +28,13 @@ export const getUsuariosSeguidos = async (req: Request, res: Response) => {
 }
 
 export const postSeguirUsuario = async (req: Request, res: Response) => {
-    const { id: idSeguido } = req.body;
+    const { usuario } = req.body;
     const { idUsuario: idSeguidor } = res.locals;
 
     try {
         const existe = await Usuarios.findFirst({
             where: {
-                idUsuario: idSeguido,
+                usuario,
                 status: true
             }
         });
@@ -45,7 +45,7 @@ export const postSeguirUsuario = async (req: Request, res: Response) => {
 
         await UsuariosSeguidos.create({
             data: {
-                idSeguido,
+                idSeguido:existe.idUsuario,
                 idSeguidor,
             }
         });
