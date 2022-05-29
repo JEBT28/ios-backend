@@ -328,7 +328,7 @@ export const postIniciarSesion = async (req: Request, res: Response) => {
     return res.json({
       ok: true,
       msg: "Inicio de sesion exitoso",
-      results: { token },
+      results: { token, usuario:usuarioDB.usuario },
     });
   } catch (error) {
     return res.status(400).json({
@@ -349,7 +349,7 @@ export const renovarToken = async (req: Request, res: Response) => {
     return res.json({
       ok: true,
       msg: "Token renovado",
-      results: { token: tokenRenew },
+      results: { token: tokenRenew, usuario: usuario.usuario },
     });
   } catch (error: any) {
     return res.status(401).json({
@@ -399,3 +399,14 @@ export const subirFotoUsuario = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getBuscarUsuarios = async (req: Request, res: Response)=>{
+
+  const { busqueda }= req.body;
+
+try {
+
+} catch (error:any){
+
+}
+}
