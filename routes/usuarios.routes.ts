@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deleteEliminarUsuario, getUsuarios,
+    deleteEliminarUsuario, getUsuario, getUsuarios,
     postIniciarSesion, postNuevoUsuario,
     putEditarContraseña, putEditarUsuario,
     renovarToken,
@@ -13,6 +13,7 @@ import { usuarioSchema, eliminarUsuarioSchema, editarContraseñaSchema, editarUs
 const router = Router()
 
 router.get("/", validarJWT, getUsuarios);
+router.get("/:usuario", validarJWT, getUsuario);
 router.post("/", validarSchema(usuarioSchema), postNuevoUsuario);
 router.put("/:id", validarJWT, validarSchema(editarUsuarioSchema), putEditarUsuario);
 router.delete("/:id", validarJWT, validarSchema(eliminarUsuarioSchema), deleteEliminarUsuario);
@@ -20,6 +21,5 @@ router.post("/foto", validarJWT, subirFotoUsuario);
 router.put("/contrasena/:id", validarJWT, validarSchema(editarContraseñaSchema), putEditarContraseña);
 router.post("/auth/", validarSchema(iniciarSesionSchema), postIniciarSesion)
 router.get("/auth/renew", renovarToken);
-
 
 export default router;

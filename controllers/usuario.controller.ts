@@ -19,35 +19,152 @@ export const getUsuarios = async (req: Request, res: Response) => {
         status: true,
         foto: true,
         Posts: {
-            where: {
-                status:true
-            }
+          where: {
+            status: true,
+          },
         },
         Seguidos: {
-            where: {
-                status:true
-            }
-        },Seguidores: {
+          select: {
+            idUsuarioSeguido: true,
+            Seguido: {
+              select: {
+                usuario: true,
+                nombre: true,
+                apellido: true,
+              },
+            },
+          },
           where: {
-              status:true
-          }
-      },
+            status: true,
+          },
+        },
+        Seguidores: {
+          select: {
+            Seguidor: {
+              select: {
+                usuario: true,
+                nombre: true,
+                apellido: true,
+              },
+            },
+          },
+          where: {
+            status: true,
+          },
+        },
       },
     });
+
+    const results = usuarios.map((u) => {
+      const seguidos = u?.Seguidos?.map(({ idUsuarioSeguido, Seguido }) => {
+        return { idUsuarioSeguido, ...Seguido };
+      });
+
+      const seguidores = u?.Seguidores?.map(({ Seguidor }) => {
+        return Seguidor;
+      });
+
+      const aux: any = u;
+      delete aux?.Seguidores;
+      delete aux?.Seguidos;
+
+      return { ...u, Seguidores: seguidores, Seguidos: seguidos };
+    });
+
     return res.json({
       ok: true,
       msg: "Listado de usuarios",
-      results: usuarios,
+      results: results,
     });
   } catch (error: any) {
-    console.log("🚀 ~ file: usuario.controller.ts ~ line 39 ~ getUsuarios ~ error", error)
-    return res
-      .status(400)
-      .json({
-        ok: false,
-        msg: "Ocurrio un problema consultando el listado de usuarios",
-        value: error,
-      });
+    console.log("🚀 ~ file: usuario.controller.ts ~ line 80 ~ getUsuarios ~ error", error)
+    return res.status(400).json({
+      ok: false,
+      msg: "Ocurrio un problema consultando el listado de usuarios",
+      value: error,
+    });
+  }
+};
+
+export const getUsuario = async (req: Request, res: Response) => {
+  const { usuario } = req.params;
+  try {
+    const results = await Usuarios.findFirst({
+      where: {
+        usuario,
+        status: true,
+      },
+      select: {
+        idUsuario: true,
+        nombre: true,
+        apellido: true,
+        usuario: true,
+        status: true,
+        foto: true,
+        Posts: {
+          where: {
+            status: true,
+          },
+        },
+        Seguidos: {
+          select: {
+            idUsuarioSeguido: true,
+            Seguido: {
+              select: {
+                usuario: true,
+                nombre: true,
+                apellido: true,
+              },
+            },
+          },
+          where: {
+            status: true,
+          },
+        },
+        Seguidores: {
+          select: {
+            Seguidor: {
+              select: {
+                usuario: true,
+                nombre: true,
+                apellido: true,
+              },
+            },
+          },
+          where: {
+            status: true,
+          },
+        },
+      },
+    });
+
+    const seguidos = results?.Seguidos?.map(({ idUsuarioSeguido, Seguido }) => {
+      return { idUsuarioSeguido, ...Seguido };
+    });
+
+    const seguidores = results?.Seguidores?.map(({ Seguidor }) => {
+      return Seguidor;
+    });
+
+    const aux: any = results;
+    delete aux?.Seguidores;
+    delete aux?.Seguidos;
+
+    return res.json({
+      ok: true,
+      msg: "Usuario encontrado",
+      results: {
+        Seguidores: seguidores,
+        seguidos: seguidos,
+        ...aux,
+      },
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      ok: false,
+      msg: "Ocurrio un problema consultando el usuario",
+      value: error,
+    });
   }
 };
 
@@ -65,24 +182,20 @@ export const postNuevoUsuario = async (req: Request, res: Response) => {
     });
 
     if (existe) {
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          msg: "Ya existe otra cuenta con el usuario especificado",
-        });
+      return res.status(400).json({
+        ok: false,
+        msg: "Ya existe otra cuenta con el usuario especificado",
+      });
     }
 
     await Usuarios.create({ data: data });
     return res.json({ ok: true, msg: "Usuario creado correctamente" });
   } catch (error: any) {
-    return res
-      .status(400)
-      .json({
-        ok: false,
-        msg: "Ocurrio un problema al crear un nuevo usuario",
-        value: error,
-      });
+    return res.status(400).json({
+      ok: false,
+      msg: "Ocurrio un problema al crear un nuevo usuario",
+      value: error,
+    });
   }
 };
 
@@ -116,13 +229,11 @@ export const putEditarUsuario = async (req: Request, res: Response) => {
       results: editarUsuario,
     });
   } catch (error: any) {
-    return res
-      .status(400)
-      .json({
-        ok: false,
-        msg: "Ocurrio un problema al editar el usuario",
-        value: error,
-      });
+    return res.status(400).json({
+      ok: false,
+      msg: "Ocurrio un problema al editar el usuario",
+      value: error,
+    });
   }
 };
 
@@ -147,13 +258,11 @@ export const deleteEliminarUsuario = async (req: Request, res: Response) => {
       results: eliminarUsuario,
     });
   } catch (error: any) {
-    return res
-      .status(400)
-      .json({
-        ok: false,
-        msg: "Ocurrio un problema al eliminar el usuario",
-        value: error,
-      });
+    return res.status(400).json({
+      ok: false,
+      msg: "Ocurrio un problema al eliminar el usuario",
+      value: error,
+    });
   }
 };
 
@@ -187,13 +296,11 @@ export const putEditarContraseña = async (req: Request, res: Response) => {
 
     return res.json({ ok: true, msg: "Contraseña editada correctamente" });
   } catch (error) {
-    return res
-      .status(400)
-      .json({
-        ok: false,
-        msg: "Ocurrio un problema al editar la contraseña",
-        value: error,
-      });
+    return res.status(400).json({
+      ok: false,
+      msg: "Ocurrio un problema al editar la contraseña",
+      value: error,
+    });
   }
 };
 
@@ -224,13 +331,11 @@ export const postIniciarSesion = async (req: Request, res: Response) => {
       results: { token },
     });
   } catch (error) {
-    return res
-      .status(400)
-      .json({
-        ok: false,
-        msg: "Ocurrio un problema al iniciar sesion",
-        value: error,
-      });
+    return res.status(400).json({
+      ok: false,
+      msg: "Ocurrio un problema al iniciar sesion",
+      value: error,
+    });
   }
 };
 
@@ -240,7 +345,6 @@ export const renovarToken = async (req: Request, res: Response) => {
 
   try {
     const { usuario } = await verificarToken(token);
-    console.log("🚀 ~ file: usuario.controller.ts ~ line 238 ~ renovarToken ~ usuario", usuario)
     const tokenRenew = generarToken(usuario);
     return res.json({
       ok: true,
@@ -248,13 +352,11 @@ export const renovarToken = async (req: Request, res: Response) => {
       results: { token: tokenRenew },
     });
   } catch (error: any) {
-    return res
-      .status(401)
-      .json({
-        ok: false,
-        msg: "Ocurrio un problema al renovar el token",
-        value: error,
-      });
+    return res.status(401).json({
+      ok: false,
+      msg: "Ocurrio un problema al renovar el token",
+      value: error,
+    });
   }
 };
 
@@ -266,10 +368,6 @@ export const subirFotoUsuario = async (req: Request, res: Response) => {
   try {
     const [url, error] = await subirImagen(img, `profile_${idUsuario}`);
     if (error) {
-      console.log(
-        "🚀 ~ file: usuario.controller.ts ~ line 168 ~ subirFotoUsuario ~ error",
-        error
-      );
       throw error;
     }
 
@@ -294,16 +392,10 @@ export const subirFotoUsuario = async (req: Request, res: Response) => {
       results: usuario,
     });
   } catch (error) {
-    console.log(
-      "🚀 ~ file: usuario.controller.ts ~ line 181 ~ subirFotoUsuario ~ error",
-      error
-    );
-    return res
-      .status(401)
-      .json({
-        ok: false,
-        msg: "Ocurrio un problema al renovar el token",
-        value: error,
-      });
+    return res.status(401).json({
+      ok: false,
+      msg: "Ocurrio un problema al renovar el token",
+      value: error,
+    });
   }
 };
