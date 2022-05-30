@@ -331,6 +331,7 @@ export const postIniciarSesion = async (req: Request, res: Response) => {
       results: { token, usuario:usuarioDB.usuario },
     });
   } catch (error) {
+    console.log("🚀 ~ file: usuario.controller.ts ~ line 334 ~ postIniciarSesion ~ error", error)
     return res.status(400).json({
       ok: false,
       msg: "Ocurrio un problema al iniciar sesion",
