@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { subirImagen } from "./../helpers/subirImagen.helper";
 import { randomUUID } from "crypto";
 
-const { posts: Posts, usuariosSeguidos:UsuariosSeguidos } = new PrismaClient();
+const { posts: Posts, usuariosSeguidos: UsuariosSeguidos } = new PrismaClient();
 
 export const getPostsDeUsuariosSeguidos = async (
   req: Request,
@@ -16,23 +16,40 @@ export const getPostsDeUsuariosSeguidos = async (
     const auxUsuario = await UsuariosSeguidos.findMany({
       where: {
         idSeguidor: idUsuario,
-        status:true
+        status: true
       },
+      select: {
+        idSeguido: true,
+        Seguido: {
+          select: {
+            usuario: true
+          }
+        }
+      }
     });
     console.log("🚀 ~ file: posts.controller.ts ~ line 21 ~ auxUsuario", auxUsuario)
 
     const idSeguidosList = auxUsuario.map((s) => s.idSeguido);
 
-    const results = await Posts.findMany({
+    const posts = await Posts.findMany({
       where: {
         status: true,
         Usuarios: {
-            idUsuario:{
-                in: idSeguidosList
-            }
+          idUsuario: {
+            in: idSeguidosList
+          }
         },
       },
     });
+
+    const results = posts.map((p) => {
+      const usuario = auxUsuario.find(u => u.idSeguido === p.idUsuario)!.Seguido.usuario
+
+      return {
+        usuario,
+        ...p
+      }
+    })
 
     return res.json({ ok: true, results });
   } catch (error: any) {
