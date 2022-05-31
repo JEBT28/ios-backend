@@ -38,8 +38,8 @@ model UsuariosSeguidos {
   idSeguido        Int
   fechaSeguimiento DateTime @default(now()) @db.DateTime(0)
   status           Boolean  @default(true)
-  Seguido          Usuarios @relation("Seguidos", fields: [idSeguidor], references: [idUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK2_seguidor")
-  Seguidor         Usuarios @relation("Seguidores", fields: [idSeguido], references: [idUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK1_seguido")
+  Seguidor          Usuarios @relation("Seguidos", fields: [idSeguidor], references: [idUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK2_seguidor")
+  Seguido         Usuarios @relation("Seguidores", fields: [idSeguido], references: [idUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK1_seguido")
 
   @@index([idSeguido], map: "FK1_seguido")
   @@index([idSeguidor], map: "FK2_seguidor")
