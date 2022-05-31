@@ -9,6 +9,6 @@ export const validarSchema = (schema: any) => async (req: Request, res: Response
         });
         return next();
     } catch (err: any) {
-        return res.status(500).json({ type: err.name, message: err.message });
+        return res.status(500).json({ ok:false, msg: err.message });
     }
 };
