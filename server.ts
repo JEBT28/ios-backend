@@ -9,7 +9,8 @@ import * as SeguidoresRutas from "./routes/Seguidores.routes";
 
 const server = express();
 
-server.use(express.json());
+server.use(express.json({limit: '50mb'}));
+
 server.get('/', (req:Request, res:Response) => {
 res.send('BackEnd de Prueba');
 });
