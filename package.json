@@ -5,10 +5,10 @@
   "type": "commonjs",
   "main": "./dist/server.js",
   "scripts": {
-    "start": "node ./dist/server.js",
+    "start": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
     
-    "prestart": "npx prisma generate && npx tsc",
+    "prestart": "npx prisma generate",
     "deploy": "git push heroku main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -36,10 +36,11 @@
     "node-fetch": "^2.6.7",
     "nodemon": "^2.0.16",
     "typescript": "^4.6.4",
-    "yup": "^0.32.11"
-  },
-  "devDependencies": {
+    "yup": "^0.32.11",
     "concurrently": "^7.2.0",
     "prisma": "^3.14.0"
+  },
+  "devDependencies": {
+
   }
 }
