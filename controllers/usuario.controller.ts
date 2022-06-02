@@ -148,6 +148,8 @@ export const getUsuario = async (req: Request, res: Response) => {
       return Seguido;
     });
 
+    const Posts = results?.Posts?.map((p) => { return {usuario, ...p}});
+
     const aux: any = results;
     delete aux?.Seguidores;
     delete aux?.Seguidos;
@@ -158,6 +160,7 @@ export const getUsuario = async (req: Request, res: Response) => {
       results: {
         Seguidores: seguidores,
         Seguidos: seguidos,
+        Posts,
         ...aux,
       },
     });
