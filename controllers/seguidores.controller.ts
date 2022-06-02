@@ -43,6 +43,18 @@ export const postSeguirUsuario = async (req: Request, res: Response) => {
             throw new Error("El usuario que se va seguir no existe");
         }
 
+
+        const existeRelacion = await UsuariosSeguidos.findFirst({
+            where: {
+                idSeguidor,
+                idSeguido: existe.idUsuario,
+                status: true
+        }})
+
+        if(existeRelacion) {
+            throw new Error("Ya seguiste a este usuario");
+        }
+
         await UsuariosSeguidos.create({
             data: {
                 idSeguido:existe.idUsuario,
