@@ -207,17 +207,17 @@ export const postNuevoUsuario = async (req: Request, res: Response) => {
 
 export const putEditarUsuario = async (req: Request, res: Response) => {
   const data = req.body;
-  const { id } = req.params;
+  const { usuario } = req.params;
 
   try {
-    const usuario = await Usuarios.findFirst({ where: { idUsuario: +id } });
+    const existe = await Usuarios.findFirst({ where: { usuario, status:true } });
 
-    if (!usuario) {
+    if (!existe) {
       return res.status(404).json({ ok: true, msg: "El usuario no existe" });
     }
 
     const editarUsuario = await Usuarios.update({
-      where: { idUsuario: +id },
+      where: { idUsuario: existe.idUsuario },
       data: data,
       select: {
         idUsuario: true,
@@ -244,16 +244,16 @@ export const putEditarUsuario = async (req: Request, res: Response) => {
 };
 
 export const deleteEliminarUsuario = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { usuario } = req.params;
   try {
-    const usuario = await Usuarios.findFirst({ where: { idUsuario: +id } });
+    const existe = await Usuarios.findFirst({ where: { usuario, status:true} });
 
-    if (!usuario) {
+    if (!existe) {
       return res.status(404).json({ ok: true, msg: "El usuario no existe" });
     }
 
     const eliminarUsuario = await Usuarios.update({
-      where: { idUsuario: +id },
+      where: { idUsuario: existe.idUsuario },
       data: { status: false },
       select: { idUsuario: true },
     });
@@ -273,12 +273,12 @@ export const deleteEliminarUsuario = async (req: Request, res: Response) => {
 };
 
 export const putEditarContraseña = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { idUsuario } = res.locals;
   const { actual, nueva } = req.body;
 
   try {
     const usuario = await Usuarios.findFirst({
-      where: { idUsuario: +id, status: true },
+      where: { idUsuario: +idUsuario, status: true },
     });
 
     if (!usuario) {
@@ -296,7 +296,7 @@ export const putEditarContraseña = async (req: Request, res: Response) => {
     const hash = await brcypt.hash(nueva, 10);
 
     const editarContrasena = await Usuarios.update({
-      where: { idUsuario: +id },
+      where: { idUsuario: +idUsuario },
       data: { contrasena: hash },
     });
 
