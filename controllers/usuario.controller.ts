@@ -9,6 +9,7 @@ import { subirImagen } from "../helpers/subirImagen.helper";
 const { usuarios: Usuarios } = new PrismaClient();
 
 export const getUsuarios = async (req: Request, res: Response) => {
+  const {usuario} = res.locals
   try {
     const usuarios = await Usuarios.findMany({
       select: {
@@ -26,7 +27,7 @@ export const getUsuarios = async (req: Request, res: Response) => {
         Seguidos: {
           select: {
             idUsuarioSeguido: true,
-            Seguido: {
+            Seguidor: {
               select: {
                 usuario: true,
                 nombre: true,
@@ -40,7 +41,7 @@ export const getUsuarios = async (req: Request, res: Response) => {
         },
         Seguidores: {
           select: {
-            Seguidor: {
+            Seguido: {
               select: {
                 usuario: true,
                 nombre: true,
@@ -56,19 +57,20 @@ export const getUsuarios = async (req: Request, res: Response) => {
     });
 
     const results = usuarios.map((u) => {
-      const seguidos = u?.Seguidos?.map(({ idUsuarioSeguido, Seguido }) => {
-        return { idUsuarioSeguido, ...Seguido };
+      const seguidos = u?.Seguidos?.map(({ idUsuarioSeguido, Seguidor }) => {
+        return { idUsuarioSeguido, ...Seguidor };
       });
 
-      const seguidores = u?.Seguidores?.map(({ Seguidor }) => {
-        return Seguidor;
+      const seguidores = u?.Seguidores?.map(({ Seguido }) => {
+        return Seguido;
       });
 
+      const seguido = seguidores.some((s) => s.usuario === usuario);
       const aux: any = u;
       delete aux?.Seguidores;
       delete aux?.Seguidos;
 
-      return { ...u, Seguidores: seguidores, Seguidos: seguidos };
+      return { ...u, Seguidores: seguidores, Seguidos: seguidos, seguido };
     });
 
     return res.json({
@@ -324,6 +326,7 @@ export const postIniciarSesion = async (req: Request, res: Response) => {
     }
 
     const token = generarToken(usuarioDB);
+
 
     return res.json({
       ok: true,
