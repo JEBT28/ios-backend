@@ -111,7 +111,7 @@ export const getUsuario = async (req: Request, res: Response) => {
         Seguidos: {
           select: {
             idUsuarioSeguido: true,
-            Seguido: {
+            Seguidor: {
               select: {
                 usuario: true,
                 nombre: true,
@@ -125,7 +125,7 @@ export const getUsuario = async (req: Request, res: Response) => {
         },
         Seguidores: {
           select: {
-            Seguidor: {
+            Seguido: {
               select: {
                 usuario: true,
                 nombre: true,
@@ -140,12 +140,12 @@ export const getUsuario = async (req: Request, res: Response) => {
       },
     });
 
-    const seguidos = results?.Seguidos?.map(({ idUsuarioSeguido, Seguido }) => {
-      return { idUsuarioSeguido, ...Seguido };
+    const seguidos = results?.Seguidos?.map(({ idUsuarioSeguido, Seguidor }) => {
+      return { idUsuarioSeguido, ...Seguidor };
     });
 
-    const seguidores = results?.Seguidores?.map(({ Seguidor }) => {
-      return Seguidor;
+    const seguidores = results?.Seguidores?.map(({ Seguido}) => {
+      return Seguido;
     });
 
     const aux: any = results;
@@ -157,7 +157,7 @@ export const getUsuario = async (req: Request, res: Response) => {
       msg: "Usuario encontrado",
       results: {
         Seguidores: seguidores,
-        seguidos: seguidos,
+        Seguidos: seguidos,
         ...aux,
       },
     });
