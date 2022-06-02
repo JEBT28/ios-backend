@@ -27,7 +27,7 @@ export const getUsuarios = async (req: Request, res: Response) => {
         Seguidos: {
           select: {
             idUsuarioSeguido: true,
-            Seguidor: {
+            Seguido: {
               select: {
                 usuario: true,
                 nombre: true,
@@ -41,7 +41,7 @@ export const getUsuarios = async (req: Request, res: Response) => {
         },
         Seguidores: {
           select: {
-            Seguido: {
+            Seguidor: {
               select: {
                 usuario: true,
                 nombre: true,
@@ -57,12 +57,12 @@ export const getUsuarios = async (req: Request, res: Response) => {
     });
 
     const results = usuarios.map((u) => {
-      const seguidos = u?.Seguidos?.map(({ idUsuarioSeguido, Seguidor }) => {
-        return { idUsuarioSeguido, ...Seguidor };
+      const seguidos = u?.Seguidos?.map(({ idUsuarioSeguido, Seguido}) => {
+        return { idUsuarioSeguido, ...Seguido };
       });
 
-      const seguidores = u?.Seguidores?.map(({ Seguido }) => {
-        return Seguido;
+      const seguidores = u?.Seguidores?.map(({ Seguidor }) => {
+        return Seguidor;
       });
 
       const seguido = seguidores.some((s) => s.usuario === usuario);
@@ -111,7 +111,7 @@ export const getUsuario = async (req: Request, res: Response) => {
         Seguidos: {
           select: {
             idUsuarioSeguido: true,
-            Seguidor: {
+            Seguido: {
               select: {
                 usuario: true,
                 nombre: true,
@@ -125,7 +125,7 @@ export const getUsuario = async (req: Request, res: Response) => {
         },
         Seguidores: {
           select: {
-            Seguido: {
+            Seguidor: {
               select: {
                 usuario: true,
                 nombre: true,
@@ -140,12 +140,12 @@ export const getUsuario = async (req: Request, res: Response) => {
       },
     });
 
-    const seguidos = results?.Seguidos?.map(({ idUsuarioSeguido, Seguidor }) => {
-      return { idUsuarioSeguido, ...Seguidor };
+    const seguidos = results?.Seguidos?.map(({ idUsuarioSeguido, Seguido }) => {
+      return { idUsuarioSeguido, ...Seguido };
     });
 
-    const seguidores = results?.Seguidores?.map(({ Seguido}) => {
-      return Seguido;
+    const seguidores = results?.Seguidores?.map(({ Seguidor}) => {
+      return Seguidor;
     });
 
     const posts = results?.Posts?.map((p) => { return {usuario, ...p}});
