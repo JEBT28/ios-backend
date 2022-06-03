@@ -15,10 +15,10 @@ const router = Router()
 router.get("/", validarJWT, getUsuarios);
 router.get("/:usuario", validarJWT, getUsuario);
 router.post("/", validarSchema(usuarioSchema), postNuevoUsuario);
+router.put("/contrasena/", validarJWT, validarSchema(editarContraseñaSchema), putEditarContraseña);
 router.put("/:usuario", validarJWT, validarSchema(editarUsuarioSchema), putEditarUsuario);
 router.delete("/:usuario", validarJWT, validarSchema(eliminarUsuarioSchema), deleteEliminarUsuario);
 router.post("/foto", validarJWT, subirFotoUsuario);
-router.put("/contrasena/", validarJWT, validarSchema(editarContraseñaSchema), putEditarContraseña);
 router.post("/auth/", validarSchema(iniciarSesionSchema), postIniciarSesion)
 router.get("/auth/renew", renovarToken);
 
