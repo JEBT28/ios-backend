@@ -41,7 +41,7 @@ export const getPostsDeUsuariosSeguidos = async (
         },
       },
       orderBy:{
-        publicacion: "desc"
+        publicacion: "asc"
       }
     });
 
