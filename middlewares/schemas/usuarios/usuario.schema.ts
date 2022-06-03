@@ -11,7 +11,6 @@ export const usuarioSchema = yup.object({
 
 export const editarUsuarioSchema = yup.object({
     body: yup.object({
-        usuario: yup.string().required(),
         nombre: yup.string().required(),
         apellido: yup.string().required(),
     }),
