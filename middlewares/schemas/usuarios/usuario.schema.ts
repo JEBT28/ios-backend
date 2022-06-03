@@ -16,12 +16,12 @@ export const editarUsuarioSchema = yup.object({
         apellido: yup.string().required(),
     }),
     params: yup.object({
-        usuario: yup.number().required()
+        usuario: yup.string().required()
     })
 });
 export const eliminarUsuarioSchema = yup.object({
     params: yup.object({
-        usuario: yup.number().required()
+        usuario: yup.string().required()
     })
 });
 
