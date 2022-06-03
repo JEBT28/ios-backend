@@ -40,6 +40,9 @@ export const getPostsDeUsuariosSeguidos = async (
           }
         },
       },
+      orderBy:{
+        publicacion: "desc"
+      }
     });
 
     const results = posts.map((p) => {
