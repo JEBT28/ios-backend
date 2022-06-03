@@ -16,12 +16,12 @@ export const editarUsuarioSchema = yup.object({
         apellido: yup.string().required(),
     }),
     params: yup.object({
-        id: yup.number().required()
+        usuario: yup.number().required()
     })
 });
 export const eliminarUsuarioSchema = yup.object({
     params: yup.object({
-        id: yup.number().required()
+        usuario: yup.number().required()
     })
 });
 
@@ -30,9 +30,6 @@ export const editarContraseñaSchema = yup.object({
         actual: yup.string().required(),
         nueva: yup.string().min(6).required(),
     }),
-    params: yup.object({
-        id: yup.number().required()
-    })
 });
 
 export const iniciarSesionSchema = yup.object({
