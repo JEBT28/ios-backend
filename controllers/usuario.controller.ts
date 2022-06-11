@@ -418,7 +418,7 @@ export const getBuscarUsuarios = async (req: Request, res: Response) => {
 
         if (!params) throw new Error("La busqueda esta vacia")
 
-        const [results,error] = await findUsuarios(params)
+        const [results, error] = await findUsuarios(params)
         if (error) throw error
 
         return res.json({
@@ -435,46 +435,53 @@ export const getBuscarUsuarios = async (req: Request, res: Response) => {
     }
 }
 
-const findUsuarios = async (params: String[]): Promise<[any[],any]> => {
+const findUsuarios = async (params: String[]): Promise<[any[], any]> => {
     try {
-        let usuarios:any[] = []
+        let usuarios: any[] = []
 
-    for (const q of params) {
-        const results = await Usuarios.findMany({
-            select:{
-                usuario:true,
-                nombre:true,
-                apellido:true,
-                foto:true,
-            },
-            where: {
-                status: true,
-                OR: [
-                    {
-                        usuario: {
-                            contains: q.toString()
+        for (const q of params) {
+            const results = await Usuarios.findMany({
+                select: {
+                    usuario: true,
+                    nombre: true,
+                    apellido: true,
+                    foto: true,
+                },
+                where: {
+                    status: true,
+                    OR: [
+                        {
+                            usuario: {
+                                contains: q.toString()
+                            }
+                        },
+                        {
+                            nombre: {
+                                contains: q.toString()
+                            },
+                        },
+                        {
+                            apellido: {
+                                contains: q.toString()
+                            },
                         }
-                    },
-                    {
-                        nombre: {
-                            contains: q.toString()
-                        },
-                    },
-                    {
-                        apellido: {
-                            contains: q.toString()
-                        },
-                    }
-                ]
-            }
-        });
-        usuarios = [...usuarios,...results]
-    }
-    const res =[... new Set(usuarios)]
-    return [res,null]
+                    ]
+                }
+            });
+            usuarios = [...usuarios, ...results]
+        }
+        const res:any[] = []
 
-    }
-    catch (err:any) {
-        return [[],err]
+        usuarios.forEach(u=> {
+            if (!res.some(x => x.usuario = u.usuario)){
+                res.push(u)
+            }
+
+        })
+
+        return [res, null]
+
+    } catch (err: any) {
+        return [[], err]
     }
 }
