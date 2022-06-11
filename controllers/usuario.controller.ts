@@ -473,7 +473,7 @@ const findUsuarios = async (params: String[]): Promise<[any[], any]> => {
         const res:any[] = []
 
         usuarios.forEach(u=> {
-            if (!res.some(x => x.usuario = u.usuario)){
+            if (!res.some(x => x.usuario === u.usuario)){
                 res.push(u)
             }
 
