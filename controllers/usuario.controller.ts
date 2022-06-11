@@ -470,7 +470,8 @@ const findUsuarios = async (params: String[]): Promise<[any[],any]> => {
         });
         usuarios = [...usuarios,...results]
     }
-    return [usuarios,null]
+    const res =[... new Set(usuarios)]
+    return [res,null]
 
     }
     catch (err:any) {
