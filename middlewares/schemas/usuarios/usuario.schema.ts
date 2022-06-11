@@ -24,7 +24,7 @@ export const eliminarUsuarioSchema = yup.object({
     })
 });
 
-export const editarContraseñaSchema = yup.object({
+export const editarContrasenaSchema = yup.object({
     body: yup.object({
         actual: yup.string().required(),
         nueva: yup.string().min(6).required(),

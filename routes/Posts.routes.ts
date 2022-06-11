@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validarJWT } from './../middlewares/validarJWT.middleware';
-import { getPostsDeUsuariosSeguidos, postNuevaPublicacion, deletePublicacion } from './../controllers/posts.controller';
+import { getPostsDeUsuariosSeguidos, postNuevaPublicacion, deletePublicacion } from '../controllers/posts.controller';
 
 const router = Router();
 

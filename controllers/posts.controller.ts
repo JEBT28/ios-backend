@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { subirImagen } from "./../helpers/subirImagen.helper";
+import { subirImagen } from "../helpers/subirImagen.helper";
 import { randomUUID } from "crypto";
 
 const { posts: Posts, usuariosSeguidos: UsuariosSeguidos } = new PrismaClient();
