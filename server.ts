@@ -8,8 +8,10 @@ import * as SeguidoresRutas from "./routes/Seguidores.routes";
 
 
 const server = express();
-
-server.use(cors)
+const options = {
+    origin:"*"
+}
+server.use(cors(options))
 server.use(express.json({limit: '50mb'}));
 
 server.get('/', (req:Request, res:Response) => {
