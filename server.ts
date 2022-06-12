@@ -1,5 +1,5 @@
 import express , {Request, Response} from 'express';
-import { PrismaClient } from '@prisma/client';
+import cors from "cors"
 
 //----------Rutas-----------
 import * as UsuariosRutas from './routes/usuarios.routes';
@@ -9,6 +9,7 @@ import * as SeguidoresRutas from "./routes/Seguidores.routes";
 
 const server = express();
 
+server.use(cors)
 server.use(express.json({limit: '50mb'}));
 
 server.get('/', (req:Request, res:Response) => {
